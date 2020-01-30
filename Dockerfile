@@ -24,9 +24,9 @@ RUN set -ex && \
     gpg --batch --verify telegraf-${TELEGRAF_VERSION}_linux_armhf.tar.gz.asc telegraf-${TELEGRAF_VERSION}_linux_armhf.tar.gz && \
     mkdir -p /usr/src /etc/telegraf && \
     tar -C /usr/src -xzf telegraf-${TELEGRAF_VERSION}_linux_armhf.tar.gz && \
-    mv /usr/src/telegraf*/etc/telegraf.conf /etc/telegraf/ && \
-    chmod +x /usr/src/telegraf*/bin/* && \
-    cp -a /usr/src/telegraf*/bin/* /usr/bin/ && \
+    mv /usr/src/telegraf/etc/telegraf/telegraf.conf /etc/telegraf/ && \
+    chmod +x /usr/src/telegraf/usr/bin/telegraf && \
+    cp -a /usr/src/telegraf/usr/bin/telegraf /usr/bin/ && \
     rm -rf *.tar.gz* /usr/src /root/.gnupg && \
     apk del .build-deps
 
