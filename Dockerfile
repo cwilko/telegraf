@@ -10,6 +10,9 @@ RUN apk add --no-cache iputils ca-certificates net-snmp-tools procps lm_sensors 
 
 ENV TELEGRAF_VERSION 1.13.2
 
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 RUN set -ex && \
     apk add --no-cache --virtual .build-deps wget gnupg tar && \
     for key in \
@@ -32,7 +35,8 @@ RUN set -ex && \
 
 EXPOSE 8125/udp 8092/udp 8094
 
-COPY entrypoint.sh /entrypoint.sh
+
+
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["telegraf"]
 
