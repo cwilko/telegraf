@@ -1,4 +1,12 @@
-FROM arm32v7/alpine 
+FROM arm64v8/alpine as target-arm64
+
+ENV ARCH amd64
+
+FROM arm32v7/alpine as target-armv7
+
+ENV ARCH armhf
+
+FROM target-$TARGETARCH$TARGETVARIANT as builder
 
 RUN apk add raspberrypi
 RUN ln -s /opt/vc/bin/vcgencmd /usr/bin/vcgencmd
@@ -19,11 +27,11 @@ RUN set -ex && \
     do \
         gpg --keyserver hkp://keyserver.ubuntu.com --recv-keys "$key" ; \
     done && \
-    wget --no-verbose https://dl.influxdata.com/telegraf/releases/telegraf-${TELEGRAF_VERSION}_linux_armhf.tar.gz.asc && \
-    wget --no-verbose https://dl.influxdata.com/telegraf/releases/telegraf-${TELEGRAF_VERSION}_linux_armhf.tar.gz && \
-    gpg --batch --verify telegraf-${TELEGRAF_VERSION}_linux_armhf.tar.gz.asc telegraf-${TELEGRAF_VERSION}_linux_armhf.tar.gz && \
+    wget --no-verbose https://dl.influxdata.com/telegraf/releases/telegraf-${TELEGRAF_VERSION}_linux_${ARCH}.tar.gz.asc && \
+    wget --no-verbose https://dl.influxdata.com/telegraf/releases/telegraf-${TELEGRAF_VERSION}_linux_${ARCH}.tar.gz && \
+    gpg --batch --verify telegraf-${TELEGRAF_VERSION}_linux_${ARCH}.tar.gz.asc telegraf-${TELEGRAF_VERSION}_linux_${ARCH}.tar.gz && \
     mkdir -p /usr/src /etc/telegraf && \
-    tar -C /usr/src -xzf telegraf-${TELEGRAF_VERSION}_linux_armhf.tar.gz && \
+    tar -C /usr/src -xzf telegraf-${TELEGRAF_VERSION}_linux_${ARCH}.tar.gz && \
     mv /usr/src/telegraf/etc/telegraf/telegraf.conf /etc/telegraf/ && \
     chmod +x /usr/src/telegraf/usr/bin/telegraf && \
     cp -a /usr/src/telegraf/usr/bin/telegraf /usr/bin/ && \
