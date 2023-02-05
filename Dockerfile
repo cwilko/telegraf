@@ -1,3 +1,5 @@
+# See https://github.com/influxdata/influxdata-docker/tree/master/telegraf
+
 FROM arm64v8/alpine as target-arm64
 
 ENV ARCH amd64
