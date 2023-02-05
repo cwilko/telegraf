@@ -1,5 +1,4 @@
-FROM arm32v7/alpine
-COPY qemu-arm-static /usr/bin
+FROM arm32v7/alpine 
 
 RUN apk add raspberrypi
 RUN ln -s /opt/vc/bin/vcgencmd /usr/bin/vcgencmd
