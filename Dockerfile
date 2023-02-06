@@ -2,7 +2,7 @@
 
 FROM arm64v8/alpine as target-arm64
 
-ENV ARCH amd64
+ENV ARCH arm64
 
 FROM arm32v7/alpine as target-armv7
 
