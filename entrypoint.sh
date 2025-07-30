@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-if [ "${1:0:1}" = '-' ]; then
+if [ "$(printf '%.1s' "$1")" = '-' ]; then
     set -- telegraf "$@"
 fi
 
