@@ -19,7 +19,7 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
         apt-get install -y wget gnupg ca-certificates iputils-ping net-tools procps tzdata && \
         rm -rf /var/lib/apt/lists/*; \
     else \
-        apk add --no-cache iputils ca-certificates net-snmp-tools procps lm_sensors tzdata && \
+        apk add --no-cache wget gnupg iputils ca-certificates net-snmp-tools procps lm_sensors tzdata && \
         update-ca-certificates; \
     fi
 
