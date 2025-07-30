@@ -7,14 +7,6 @@ ARG TARGETPLATFORM
 ARG TARGETARCH
 ARG TARGETVARIANT
 
-# Map Docker platforms to Telegraf architecture names
-RUN case "$TARGETPLATFORM" in \
-    "linux/amd64") echo "amd64" > /tmp/arch ;; \
-    "linux/arm64") echo "arm64" > /tmp/arch ;; \
-    "linux/arm/v7") echo "armhf" > /tmp/arch ;; \
-    *) echo "Unsupported platform: $TARGETPLATFORM" && exit 1 ;; \
-    esac
-
 # Install Raspberry Pi tools only for ARM architectures
 RUN if [ "$TARGETARCH" = "arm" ] || [ "$TARGETARCH" = "arm64" ]; then \
         apk add raspberrypi && \
@@ -31,7 +23,12 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 RUN set -ex && \
-    ARCH=$(cat /tmp/arch) && \
+    case "$TARGETPLATFORM" in \
+        "linux/amd64") ARCH="amd64" ;; \
+        "linux/arm64") ARCH="arm64" ;; \
+        "linux/arm/v7") ARCH="armhf" ;; \
+        *) echo "Unsupported platform: $TARGETPLATFORM" && exit 1 ;; \
+    esac && \
     apk add --no-cache --virtual .build-deps wget gnupg tar && \
     for key in \
         9D539D90D3328DC7D6C8D3B9D8FF8E1F7DF8B07E ; \
@@ -46,7 +43,7 @@ RUN set -ex && \
     mv /usr/src/telegraf/etc/telegraf/telegraf.conf /etc/telegraf/ && \
     chmod +x /usr/src/telegraf/usr/bin/telegraf && \
     cp -a /usr/src/telegraf/usr/bin/telegraf /usr/bin/ && \
-    rm -rf *.tar.gz* /usr/src /root/.gnupg /tmp/arch && \
+    rm -rf *.tar.gz* /usr/src /root/.gnupg && \
     apk del .build-deps
 
 EXPOSE 8125/udp 8092/udp 8094
