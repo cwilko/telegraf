@@ -20,13 +20,13 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
             wget gnupg ca-certificates iputils-ping net-tools procps tzdata lm-sensors && \
         rm -rf /var/lib/apt/lists/*; \
     else \
-        apk add --no-cache wget gnupg iputils ca-certificates net-snmp-tools procps lm_sensors tzdata && \
+        apk update && \
+        apk add --no-cache wget gnupg iputils ca-certificates net-snmp-tools procps lm_sensors tzdata raspberrypi raspberrypi-utils-vcgencmd && \
         update-ca-certificates; \
     fi
 
-# Install Raspberry Pi tools only for ARM architectures
+# Create vcgencmd symlink for ARM architectures
 RUN if [ "$TARGETARCH" = "arm" ] || [ "$TARGETARCH" = "arm64" ]; then \
-        apk add raspberrypi raspberrypi-utils-vcgencmd && \
         ln -s /opt/vc/bin/vcgencmd /usr/bin/vcgencmd; \
     fi
 
