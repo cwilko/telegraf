@@ -25,10 +25,6 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
         update-ca-certificates; \
     fi
 
-# Create vcgencmd symlink for ARM architectures
-RUN if [ "$TARGETARCH" = "arm" ] || [ "$TARGETARCH" = "arm64" ]; then \
-        ln -s /opt/vc/bin/vcgencmd /usr/bin/vcgencmd; \
-    fi
 
 # Set up DNS resolution for Alpine
 RUN if [ "$TARGETARCH" != "amd64" ]; then \
