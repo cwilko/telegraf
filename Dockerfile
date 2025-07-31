@@ -26,7 +26,7 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
 
 # Install Raspberry Pi tools only for ARM architectures
 RUN if [ "$TARGETARCH" = "arm" ] || [ "$TARGETARCH" = "arm64" ]; then \
-        apk add raspberrypi && \
+        apk add raspberrypi raspberrypi-utils-vcgencmd && \
         ln -s /opt/vc/bin/vcgencmd /usr/bin/vcgencmd; \
     fi
 
