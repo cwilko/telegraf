@@ -34,7 +34,7 @@ RUN if [ "$TARGETARCH" != "amd64" ]; then \
         echo 'hosts: files dns' >> /etc/nsswitch.conf; \
     fi
 
-ENV TELEGRAF_VERSION 1.35.2
+ENV TELEGRAF_VERSION=1.35.2
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
@@ -62,9 +62,9 @@ RUN set -ex && \
     gpg --batch --verify telegraf-${TELEGRAF_VERSION}_linux_${ARCH}.tar.gz.asc telegraf-${TELEGRAF_VERSION}_linux_${ARCH}.tar.gz && \
     mkdir -p /usr/src /etc/telegraf && \
     tar -C /usr/src -xzf telegraf-${TELEGRAF_VERSION}_linux_${ARCH}.tar.gz && \
-    mv /usr/src/telegraf/etc/telegraf/telegraf.conf /etc/telegraf/ && \
-    chmod +x /usr/src/telegraf/usr/bin/telegraf && \
-    cp -a /usr/src/telegraf/usr/bin/telegraf /usr/bin/ && \
+    find /usr/src -name "telegraf.conf" -exec cp {} /etc/telegraf/ \; || echo "No default config found, will need to provide one" && \
+    find /usr/src -name "telegraf" -type f -executable -exec cp {} /usr/bin/telegraf \; && \
+    chmod +x /usr/bin/telegraf && \
     rm -rf *.tar.gz* /usr/src /root/.gnupg && \
     if [ "$TARGETARCH" != "amd64" ]; then \
         apk del .build-deps; \
