@@ -16,7 +16,7 @@ ARG TARGETVARIANT
 # Install packages based on architecture
 RUN if [ "$TARGETARCH" = "amd64" ]; then \
         apt-get update && \
-        apt-get install -y wget gnupg ca-certificates iputils-ping net-tools procps tzdata && \
+        apt-get install -y wget gnupg ca-certificates iputils-ping net-tools procps tzdata lm-sensors && \
         rm -rf /var/lib/apt/lists/*; \
     else \
         apk add --no-cache wget gnupg iputils ca-certificates net-snmp-tools procps lm_sensors tzdata && \
