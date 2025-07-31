@@ -34,7 +34,7 @@ RUN if [ "$TARGETARCH" != "amd64" ]; then \
         echo 'hosts: files dns' >> /etc/nsswitch.conf; \
     fi
 
-ENV TELEGRAF_VERSION 1.22.4
+ENV TELEGRAF_VERSION 1.35.2
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
